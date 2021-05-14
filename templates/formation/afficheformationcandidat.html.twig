@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+<div class="row-12">
+    <a class="btn btn-primary" value="notif" href="{{ path('notificationformation') }}"><i class="fa fa-bell"></i></a>
+</div>
+{% endblock %}
+{% block body %}
+
+
+
+    <!--=================================
+    banner -->
+
+    <section class="banner bg-holder bg-overlay-black-30" style="background-image: url(images/formation.jpg);">
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-12">
+
+
+
+                    <div class="job-search-field job-search-field-02 search-under-banner">
+
+                        <div class="job-search-item">
+                            <form class="form-row basic-select-wrapper">
+                                <div class="form-group col-lg col-md-6">
+                                    <div class="form-group-search">
+                                        <label>FORMATION</label>
+                                        <div class="d-flex align-items-center"><input id="search" class="form-control" type="search" placeholder="Title"></div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="col-15">
+                                <a class="btn btn-primary" value="tri" href="{{ path('triformationtitlecandidat') }}"><i class="fa fa-sort"></i>by title</a>
+                                <a class="btn btn-primary" value="tri" href="{{ path('triformationdatecandidat') }}"><i class="fa fa-sort"></i>by date</a>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--=================================
+    banner -->
+
+    <!--=================================
+blog -->
+
+    <section class="space-ptb">
+        <div class="container">
+            <div class="col-lg-8" id="search"></div>
+            <div class="row" id="all">
+                <div class="col-lg-8">
+                    {% for I in formations %}
+                    <div class="blog-post text-center mt-4">
+                        <div class="blog-post-image">
+                            <img class="img-fluid" src="images/{{ I.imagef }}" alt="">
+                        </div>
+                        <div class="blog-post-content">
+                            <div class="blog-post-details">
+
+                                <div class="blog-post-title">
+                                    <p class="mb-0">{{ I.title }}</p>
+                                </div>
+                                <div class="blog-post-description">
+                                    <p class="mb-0">{{ I.description }}</p>
+                                </div>
+                                <div class="blog-post-time">
+                                    <a href="#"><i class="far fa-clock"></i>{{ I.dateAt|date('Y-m-d H:i:s') }}</a>
+                                    <div class="blog-post-footer">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <a class="btn btn-success" value="inscription" href="{{ path('participantf',{'id' : I.id }) }}">inscription</a></td>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="blog-post-share">
+                                    <div class="share-box">
+                                        <a href="#"> <i class="fas fa-share-alt"></i><span class="pl-2">Share</span></a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!--=================================
+    blog -->
+
+{% endblock %}
+{% block js %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $("#search").keyup(function(e){
+            var value = $(this).val();
+            $.ajax({
+                url : "{{ path('rechercheformation') }}",
+                data: {
+                    'searchValue' : value
+                },
+                type: "POST",
+                success : function(response)
+                {
+                    if(response){
+
+                        $(' div#search').empty();
+
+                        $.each(response, function(index, value) {
+                            $('div#search').append(
+                                '<div >'+ value.title +'</div>' +
+                                '<div >'+ value.description +'</div>'+
+                                '<div class="blog-post-image">'+
+                                '<img class="img-fluid" src="images/'+ value.imagef +'" alt="">'+
+                                '</div>'+
+                                '<div class="btn btn-success">'+
+                                '<a href="participantf'+value.id+'">inscription</a>'+
+                                '</div>'
+
+
+
+
+
+                            );
+                        });
+                        $('div#all').hide();
+                    }else
+                    {
+                        $('div#all').show();
+                        $('div#search').empty();
+                        $('div#search').fadeIn('fast');
+                    }
+
+
+                }
+
+
+            });
+
+        });
+
+
+
+
+    </script>
+{% endblock %}
+
+

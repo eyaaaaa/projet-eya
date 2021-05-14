@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+    <div class="add-listing">
+        <a class="btn btn-white btn-md" value="notif" href="{{ path('notificationrdv') }}"><i class="fa fa-bell"></i></a>
+    </div>
+{% endblock %}
+{% block title %}Hello RendezVousController!{% endblock %}
+
+
+
+{% block body %}
+
+
+
+        <h1>Meeting list</h1>
+            <div class="d-flex align-items-center"><input class="form-control" type="search" id="search" placeholder="Search by Date">
+                <a class="btn btn-primary" value="tri" href="{{ path('order') }}"><i class="fa fa-sort"></i></a>
+            </div>
+
+
+
+
+
+    <h4><table align="left" border="2">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Date</td>
+                    <td>Meet</td>
+                    <td>Description</td>
+                    <td>Email</td>
+                    <td>UPDATE</td>
+                    <td>DELETE</td>
+                </tr>
+            </thead>
+            <tbody id="all">
+                 {% include 'rendez_vous/rendezvousajax.html.twig' %}
+            </tbody>
+            <tbody align="left" border="2" id="search">
+            </tbody>
+            </table>
+    </h4>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $( document ).ready(function() {
+        var currentRequest = null;
+        $("#search").keyup(function(e){
+
+            var value = $(this).val();
+            if(currentRequest != null) {
+                currentRequest.abort();
+            }
+
+            currentRequest = $.ajax({
+
+                url : "{{ path('searchrdv') }}",
+                type : 'GET',
+                data: {
+                    'searchValue' : value
+                },
+
+                success : function(retour)
+                {
+                    $('#all').html(retour);
+
+                },
+            });
+            return false;
+        });
+    });
+</script>
+</script>
+{% endblock %}
+
